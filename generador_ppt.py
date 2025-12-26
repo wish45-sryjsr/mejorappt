@@ -51,8 +51,8 @@ def crear_ppt(titulos_kr, bloques_dict, secuencia, estilos, resaltados):
                 run1.font.size = Pt(estilos['tamano_letra_kr'])
             
                 # 💡 Aquí se aplica el color especial si es bloque resaltado
-                if bloque_id == resaltados[i] and bloque_id != "":
-                    run1.font.color.rgb = RGBColor(255, 192, 0)  # Dorado #FFC000
+                if bloque_id in resaltados[i]:
+                    run1.font.color.rgb = RGBColor(255, 192, 0)  # 노란색
                 else:
                     run1.font.color.rgb = RGBColor(*estilos['color_letra_kr'])
 
@@ -151,6 +151,7 @@ if st.button("완료!"):
         
     if os.path.exists(ppt_path):
         os.remove(ppt_path)
+
 
 
 
