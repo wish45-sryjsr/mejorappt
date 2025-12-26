@@ -108,11 +108,26 @@ for i in range(num_canciones):
 
     num_bloques = st.number_input(f"블록 수 #{i+1}", min_value=1, max_value=10, value=3, key=f"num_bloques_{i}")
     bloques = {}
-    for j in range(num_bloques):
-        nombre_bloque = st.text_input(f"🔠 블록 이름 #{j+1}", key=f"bloque_nombre_{i}_{j}")
-        st.markdown(f"**✏️ {nombre_bloque} 가사**")
-        contenido = st.text_area("", key=f"bloque_contenido_{i}_{j}")
-        bloques[nombre_bloque] = contenido.split("\n")
+    st.markdown("📝 **가사 전체 붙여넣기**")
+    st.markdown("- 각 단락의 첫 줄은 블록 이름으로 인식됩니다.")
+    st.markdown("- 빈 줄은 새 블록의 시작을 나타냅니다.")
+    st.markdown("- 예시: a1\\n가사1\\n가사2\\n\\nb\\n가사3\\n...")
+    
+    raw_lyrics = st.text_area("✂️ 전체 가사 붙여넣기", key=f"bloques_all_{i}")
+    bloques = {}
+    current_block = None
+    lines = raw_lyrics.split("\n")
+    
+    for line in lines + [""]:  # 마지막 블록 처리를 위해 빈 줄 추가
+        if line.strip() == "":
+            current_block = None  # 빈 줄이면 블록 종료
+            continue
+        if current_block is None:
+            current_block = line.strip()
+            bloques[current_block] = []
+        else:
+            bloques[current_block].append(line.strip())
+
     bloques_por_cancion.append(bloques)
 
     secuencia_str = st.text_input(f"슬라이드 순서 (예: A,A,B,C), 띄어쓰기 없이, 대문자 소문자 예민, 쉼표로 분리", key=f"secuencia_{i}")
@@ -134,5 +149,6 @@ if st.button("완료!"):
         
     if os.path.exists(ppt_path):
         os.remove(ppt_path)
+
 
 
