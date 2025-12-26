@@ -65,16 +65,27 @@ def crear_ppt(titulos_kr, bloques_dict, secuencia, estilos, resaltados):
 st.set_page_config(layout="wide")
 st.title("피피티 잘 부탁드립니당~")
 
-num_canciones = st.number_input("찬양 개수", min_value=1, max_value=10, step=1)
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    num_canciones = st.number_input("찬양 개수", min_value=1, max_value=10, step=1)
+
+with col2:
+    size_titulo_kr = st.number_input("[제목] 한국어 글자 크기", value=36)
+
+with col3:
+    size_letra_kr = st.number_input("[가사] 한국어 글자 크기", value=36)
+
+# Este puede quedarse debajo, en su propia línea
 altura_texto = st.slider("글자 위치 (0.0이 제일 높음)", 0.0, 6.0, value=0.5, step=0.1)
+
 
 color_titulo_kr = "#000000"
 bg_titulo = "#FFFFFF"
 color_letra_kr = "#FFFFFF"
 bg_letra = "#000000"
 
-size_titulo_kr = st.number_input("[제목] 한국어 글자 크기", value=36)
-size_letra_kr = st.number_input("[가사]  한국어 글자 크기", value=36)
+
 
 estilos = {
     'color_titulo_kr': tuple(int(color_titulo_kr[i:i+2], 16) for i in (1, 3, 5)),
@@ -123,4 +134,5 @@ if st.button("완료!"):
         
     if os.path.exists(ppt_path):
         os.remove(ppt_path)
+
 
