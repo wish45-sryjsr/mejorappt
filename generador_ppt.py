@@ -63,10 +63,10 @@ def crear_ppt(titulos_kr, bloques_dict, secuencia, estilos, resaltados):
 
 # --- Streamlit UI ---
 st.set_page_config(layout="wide")
-st.title("마한장 (블록 반복 버전)")
+st.title("피피티 잘 부탁드립니당~")
 
 num_canciones = st.number_input("찬양 개수", min_value=1, max_value=10, step=1)
-altura_texto = st.slider("글자 위치 (0.0이 제일 높음)", 0.0, 6.0, value=1.0, step=0.1)
+altura_texto = st.slider("글자 위치 (0.0이 제일 높음)", 0.0, 6.0, value=0.5, step=0.1)
 
 color_titulo_kr = "#000000"
 bg_titulo = "#FFFFFF"
@@ -104,13 +104,13 @@ for i in range(num_canciones):
         bloques[nombre_bloque] = contenido.split("\n")
     bloques_por_cancion.append(bloques)
 
-    secuencia_str = st.text_input(f"슬라이드 순서 (예: A,A,B,C)", key=f"secuencia_{i}")
+    secuencia_str = st.text_input(f"슬라이드 순서 (예: A,A,B,C), 띄어쓰기 없이, 대문자 소문자 예민, 쉼표로 분리", key=f"secuencia_{i}")
     bloque_resaltado = st.text_input(f"🎨 강조할 블록 이름 (선택사항)", key=f"resaltado_{i}").strip()
     resaltados.append(bloque_resaltado)
     secuencia = [s.strip() for s in secuencia_str.split(",") if s.strip() in bloques]
     secuencias.append(secuencia)
 
-if st.button("🎷 PPT 생성"):
+if st.button("완료!"):
     it_path = il_path = None
 
     ppt = crear_ppt(korean_titles, bloques_por_cancion, secuencias, estilos, resaltados)
@@ -119,7 +119,8 @@ if st.button("🎷 PPT 생성"):
     ppt.save(ppt_path)
 
     with open(ppt_path, "rb") as f:
-        st.download_button("📥 PPT 다운로드", f, file_name=ppt_path)
+        st.download_button("PPT 다운로드", f, file_name=ppt_path)
         
     if os.path.exists(ppt_path):
         os.remove(ppt_path)
+
