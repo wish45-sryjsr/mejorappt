@@ -125,8 +125,16 @@ for i in range(num_canciones):
 
 
     secuencia_str = st.text_input(f"슬라이드 순서 (예: A,A,B,C), 띄어쓰기 없이, 대문자 소문자 예민, 쉼표로 분리", key=f"secuencia_{i}")
-    bloque_resaltado = st.text_input(f"🎨 강조할 블록 이름 (선택사항)", key=f"resaltado_{i}").strip()
-    resaltados.append(bloque_resaltado)
+    bloque_resaltado_str = st.text_input(
+        f"후렴 블록들 입력 (쉼표로 분리)",
+        key=f"resaltado_{i}"
+    )
+    
+    bloques_resaltados = [
+        b.strip() for b in bloque_resaltado_str.split(",") if b.strip()
+    ]
+    
+    resaltados.append(bloques_resaltados)
     secuencia = [s.strip() for s in secuencia_str.split(",") if s.strip() in bloques]
     secuencias.append(secuencia)
 
@@ -143,6 +151,7 @@ if st.button("완료!"):
         
     if os.path.exists(ppt_path):
         os.remove(ppt_path)
+
 
 
 
