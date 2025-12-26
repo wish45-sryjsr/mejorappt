@@ -106,7 +106,7 @@ for i in range(num_canciones):
     titulo = st.text_input(f"한국어 [제목] #{i+1}", key=f"kr_title_{i}")
     korean_titles.append(titulo)
     
-    raw_lyrics = st.text_area("✂️ 전체 가사 붙여넣기", key=f"bloques_all_{i}")
+    raw_lyrics = st.text_area(" 전체 가사 붙여넣기", key=f"bloques_all_{i}")
     bloques = {}
     current_block = None
     lines = raw_lyrics.split("\n")
@@ -151,6 +151,7 @@ if st.button("완료!"):
         
     if os.path.exists(ppt_path):
         os.remove(ppt_path)
+
 
 
 
