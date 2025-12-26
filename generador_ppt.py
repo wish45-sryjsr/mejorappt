@@ -103,42 +103,8 @@ korean_titles, bloques_por_cancion, secuencias, resaltados = [], [], [], []
 
 for i in range(num_canciones):
     st.subheader(f"🎵 찬양 {i+1}")
-
-    col_a, col_b = st.columns([1, 2])  # izquierda y derecha
-    
-    with col_a:
-        titulo = st.text_input(f"한국어 [제목] #{i+1}", key=f"kr_title_{i}")
-        secuencia_str = st.text_input("슬라이드 순서 (예: A,A,B,C), 띄어쓰기 없이, 대문자 소문자 예민, 쉼표로 분리", key=f"secuencia_{i}")
-        bloque_resaltado = st.text_input("🎨 강조할 블록 이름 (선택사항)", key=f"resaltado_{i}").strip()
-    
-    with col_b:
-        st.markdown("✂️ **전체 가사 붙여넣기**")
-        st.markdown("- 각 단락의 첫 줄은 블록 이름으로 인식됩니다.")
-        st.markdown("- 빈 줄은 새 블록의 시작을 나타냅니다.")
-        st.markdown("- 예시: a1\\n가사1\\n가사2\\n\\nb\\n가사3\\n...")
-        raw_lyrics = st.text_area("", key=f"bloques_all_{i}")
-    
-    # Procesar los bloques
-    bloques = {}
-    current_block = None
-    lines = raw_lyrics.split("\n")
-    
-    for line in lines + [""]:
-        if line.strip() == "":
-            current_block = None
-            continue
-        if current_block is None:
-            current_block = line.strip()
-            bloques[current_block] = []
-        else:
-            bloques[current_block].append(line.strip())
-    
-    bloques_por_cancion.append(bloques)
-    resaltados.append(bloque_resaltado)
-    secuencia = [s.strip() for s in secuencia_str.split(",") if s.strip() in bloques]
-    secuencias.append(secuencia)
+    titulo = st.text_input(f"한국어 [제목] #{i+1}", key=f"kr_title_{i}")
     korean_titles.append(titulo)
-
     
     raw_lyrics = st.text_area("✂️ 전체 가사 붙여넣기", key=f"bloques_all_{i}")
     bloques = {}
@@ -177,8 +143,6 @@ if st.button("완료!"):
         
     if os.path.exists(ppt_path):
         os.remove(ppt_path)
-
-
 
 
 
