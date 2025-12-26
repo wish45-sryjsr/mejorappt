@@ -109,9 +109,6 @@ for i in range(num_canciones):
     num_bloques = st.number_input(f"블록 수 #{i+1}", min_value=1, max_value=10, value=3, key=f"num_bloques_{i}")
     bloques = {}
     st.markdown("📝 **가사 전체 붙여넣기**")
-    st.markdown("- 각 단락의 첫 줄은 블록 이름으로 인식됩니다.")
-    st.markdown("- 빈 줄은 새 블록의 시작을 나타냅니다.")
-    st.markdown("- 예시: a1\\n가사1\\n가사2\\n\\nb\\n가사3\\n...")
     
     raw_lyrics = st.text_area("✂️ 전체 가사 붙여넣기", key=f"bloques_all_{i}")
     bloques = {}
@@ -127,8 +124,9 @@ for i in range(num_canciones):
             bloques[current_block] = []
         else:
             bloques[current_block].append(line.strip())
-
+    
     bloques_por_cancion.append(bloques)
+
 
     secuencia_str = st.text_input(f"슬라이드 순서 (예: A,A,B,C), 띄어쓰기 없이, 대문자 소문자 예민, 쉼표로 분리", key=f"secuencia_{i}")
     bloque_resaltado = st.text_input(f"🎨 강조할 블록 이름 (선택사항)", key=f"resaltado_{i}").strip()
@@ -149,6 +147,7 @@ if st.button("완료!"):
         
     if os.path.exists(ppt_path):
         os.remove(ppt_path)
+
 
 
 
