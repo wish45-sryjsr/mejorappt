@@ -102,7 +102,7 @@ def crear_ppt(titulos_kr, bloques_kr, bloques_es, secuencia, estilos, resaltados
 # Streamlit UI
 # ----------------------------
 st.set_page_config(layout="wide")
-st.title("피피티 잘 부탁드립니당~ (제목 중앙 고정)")
+st.title("피피티 잘 부탁드립니당~")
 
 col1, col2, col3, col4 = st.columns(4)
 with col1:
@@ -201,3 +201,4 @@ if st.button("완료!"):
 
     if os.path.exists(ppt_path):
         os.remove(ppt_path)
+
