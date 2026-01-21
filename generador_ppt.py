@@ -177,8 +177,8 @@ for i in range(num_canciones):
     bloques_por_cancion_kr.append(bloques_kr)
     bloques_por_cancion_es.append(bloques_es)
 
-    secuencia_str = st.text_input("슬라이드 순서 (쉼표)", key=f"seq_{i}")
-    resaltado_str = st.text_input("후렴 블록", key=f"res_{i}")
+    secuencia_str = st.text_input("슬라이드 순서 (쉼표, 대문자/소문자, 띄어쓰기 없이 확인!)", key=f"seq_{i}")
+    resaltado_str = st.text_input("후렴 블록 (쉼표, 대문자/소문자, 띄어쓰기 없이 확인!)", key=f"res_{i}")
 
     secuencias.append([s for s in secuencia_str.split(",") if s in bloques_kr])
     resaltados.append([s for s in resaltado_str.split(",") if s])
@@ -201,4 +201,5 @@ if st.button("완료!"):
 
     if os.path.exists(ppt_path):
         os.remove(ppt_path)
+
 
