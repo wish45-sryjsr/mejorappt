@@ -117,13 +117,11 @@ with col4:
     size_letra_es = st.number_input("가사 스페인어 글자 크기", value=28)
 
 # ✅ 위치(높이) 3개: 제목 / KR(위) / ES(아래)
-pos1, pos2, pos3 = st.columns(3)
-with pos1:
-    altura_titulo = st.slider("제목 위치 (0.0이 제일 높음)", 0.0, 6.0, value=0.5, step=0.1)
+pos2, pos3 = st.columns(2)
 with pos2:
-    altura_kr = st.slider("한국어 가사 위치 (PPT에서 위)", 0.0, 6.0, value=1.0, step=0.1)
+    altura_kr = st.slider("한국어 가사 위치 (PPT에서 위)", 0.0, 6.0, value=0.1, step=0.1)
 with pos3:
-    altura_es = st.slider("스페인어 가사 위치 (PPT에서 아래)", 0.0, 6.0, value=2.8, step=0.1)
+    altura_es = st.slider("스페인어 가사 위치 (PPT에서 아래)", 0.0, 6.0, value=1.0, step=0.1)
 
 # (원래 코드처럼 기본 색 고정)
 color_titulo_kr = "#000000"
@@ -227,3 +225,4 @@ if st.button("완료!"):
 
     if os.path.exists(ppt_path):
         os.remove(ppt_path)
+
