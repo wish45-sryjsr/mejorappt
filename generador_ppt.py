@@ -6,13 +6,10 @@ from pptx.enum.text import PP_ALIGN
 import os
 
 # ----------------------------
-# PPT 생성 (제목: KR만 / 가사: KR 위 + ES 아래)
-# - UI 입력은 KR 왼쪽 / ES 오른쪽(2칸)이어도 됨
-# - 실제 PPT는 "한국어 위, 스페인어 아래"
-# - 블록 기준: 빈 줄로 블록 구분, 블록 첫 줄 = 블록 이름
-# - 슬라이드 순서: secuencia[i]에 입력한 블록 순서대로
-# - resaltados[i]에 들어간 블록은 KR 색을 노란색(#FFC000)으로
-# - KR/ES 가사 위치(높이) 따로 조절 가능
+# PPT 생성
+# - 제목: 항상 중앙 고정
+# - 가사: KR 위 / ES 아래
+# - UI 입력: KR 왼쪽 / ES 오른쪽
 # ----------------------------
 def crear_ppt(titulos_kr, bloques_kr, bloques_es, secuencia, estilos, resaltados):
     prs = Presentation()
@@ -20,16 +17,17 @@ def crear_ppt(titulos_kr, bloques_kr, bloques_es, secuencia, estilos, resaltados
     prs.slide_height = Inches(7.5)
 
     for i, titulo in enumerate(titulos_kr):
-        # ---------- 제목 슬라이드 ----------
+
+        # ---------- 제목 슬라이드 (중앙 고정) ----------
         slide = prs.slides.add_slide(prs.slide_layouts[6])
         slide.background.fill.solid()
         slide.background.fill.fore_color.rgb = RGBColor(*estilos["bg_titulo"])
 
         tb = slide.shapes.add_textbox(
             Inches(1),
-            Inches(estilos["altura_titulo"]),
+            Inches(3.2),              # ✅ 항상 중앙 근처 고정
             Inches(11.33),
-            Inches(3),
+            Inches(2),
         )
         tf = tb.text_frame
         tf.clear()
@@ -47,7 +45,7 @@ def crear_ppt(titulos_kr, bloques_kr, bloques_es, secuencia, estilos, resaltados
             kr_lines = bloques_kr[i].get(bloque_id, [])
             es_lines = bloques_es[i].get(bloque_id, [])
 
-            for j in range(len(kr_lines)):  # KR 라인 수 기준
+            for j in range(len(kr_lines)):
                 linea_kr = kr_lines[j]
                 linea_es = es_lines[j] if j < len(es_lines) else ""
 
@@ -55,7 +53,7 @@ def crear_ppt(titulos_kr, bloques_kr, bloques_es, secuencia, estilos, resaltados
                 slide.background.fill.solid()
                 slide.background.fill.fore_color.rgb = RGBColor(*estilos["bg_letra"])
 
-                # ✅ KR 위
+                # KR (위)
                 tb_kr = slide.shapes.add_textbox(
                     Inches(1),
                     Inches(estilos["altura_kr"]),
@@ -72,13 +70,13 @@ def crear_ppt(titulos_kr, bloques_kr, bloques_es, secuencia, estilos, resaltados
                 rkr.font.size = Pt(estilos["tamano_letra_kr"])
 
                 if bloque_id in resaltados[i]:
-                    rkr.font.color.rgb = RGBColor(255, 192, 0)  # #FFC000
+                    rkr.font.color.rgb = RGBColor(255, 192, 0)
                 else:
                     rkr.font.color.rgb = RGBColor(*estilos["color_letra_kr"])
 
                 pkr.alignment = PP_ALIGN.CENTER
 
-                # ✅ ES 아래
+                # ES (아래)
                 if linea_es.strip():
                     tb_es = slide.shapes.add_textbox(
                         Inches(1),
@@ -104,7 +102,7 @@ def crear_ppt(titulos_kr, bloques_kr, bloques_es, secuencia, estilos, resaltados
 # Streamlit UI
 # ----------------------------
 st.set_page_config(layout="wide")
-st.title("피피티 잘 부탁드립니당~ (UI는 2칸 / PPT는 KR 위 + ES 아래)")
+st.title("피피티 잘 부탁드립니당~ (제목 중앙 고정)")
 
 col1, col2, col3, col4 = st.columns(4)
 with col1:
@@ -116,14 +114,14 @@ with col3:
 with col4:
     size_letra_es = st.number_input("가사 스페인어 글자 크기", value=28)
 
-# ✅ 위치(높이) 3개: 제목 / KR(위) / ES(아래)
-pos2, pos3 = st.columns(2)
+# ✅ 가사 위치만 조절 (제목 위치 슬라이더 제거됨)
+pos1, pos2 = st.columns(2)
+with pos1:
+    altura_kr = st.slider("한국어 가사 위치 (PPT에서 위)", 0.0, 6.0, value=1.2, step=0.1)
 with pos2:
-    altura_kr = st.slider("한국어 가사 위치 (PPT에서 위)", 0.0, 6.0, value=0.1, step=0.1)
-with pos3:
-    altura_es = st.slider("스페인어 가사 위치 (PPT에서 아래)", 0.0, 6.0, value=1.0, step=0.1)
+    altura_es = st.slider("스페인어 가사 위치 (PPT에서 아래)", 0.0, 6.0, value=3.0, step=0.1)
 
-# (원래 코드처럼 기본 색 고정)
+# 색상 (고정)
 color_titulo_kr = "#000000"
 bg_titulo = "#FFFFFF"
 color_letra_kr = "#FFFFFF"
@@ -136,7 +134,6 @@ estilos = {
     "bg_letra": tuple(int(bg_letra[i:i+2], 16) for i in (1, 3, 5)),
     "color_letra_kr": tuple(int(color_letra_kr[i:i+2], 16) for i in (1, 3, 5)),
     "color_letra_es": tuple(int(color_letra_es[i:i+2], 16) for i in (1, 3, 5)),
-    "altura_titulo": altura_titulo,
     "altura_kr": altura_kr,
     "altura_es": altura_es,
     "tamano_titulo_kr": size_titulo_kr,
@@ -153,59 +150,38 @@ for i in range(num_canciones):
     titulo = st.text_input(f"한국어 [제목] #{i+1}", key=f"kr_title_{i}")
     korean_titles.append(titulo)
 
-    # ✅ UI는 KR 왼쪽 / ES 오른쪽(입력 편하게)
+    # UI는 좌/우 입력
     u1, u2 = st.columns(2)
     with u1:
-        raw_lyrics_kr = st.text_area("KR 전체 가사 붙여넣기", key=f"bloques_all_kr_{i}", height=240)
+        raw_kr = st.text_area("KR 전체 가사", key=f"kr_{i}", height=240)
     with u2:
-        raw_lyrics_es = st.text_area("ES 전체 가사 붙여넣기", key=f"bloques_all_es_{i}", height=240)
+        raw_es = st.text_area("ES 전체 가사", key=f"es_{i}", height=240)
 
-    # KR 블록 파싱
-    bloques_kr = {}
-    current_block = None
-    lines = raw_lyrics_kr.split("\n")
-    for line in lines + [""]:
-        if line.strip() == "":
-            current_block = None
-            continue
-        if current_block is None:
-            current_block = line.strip()
-            bloques_kr[current_block] = []
-        else:
-            bloques_kr[current_block].append(line.strip())
+    def parse(raw):
+        blocks, cur = {}, None
+        for line in raw.splitlines() + [""]:
+            s = line.strip()
+            if not s:
+                cur = None
+                continue
+            if cur is None:
+                cur = s
+                blocks[cur] = []
+            else:
+                blocks[cur].append(s)
+        return blocks
+
+    bloques_kr = parse(raw_kr)
+    bloques_es = parse(raw_es)
+
     bloques_por_cancion_kr.append(bloques_kr)
-
-    # ES 블록 파싱
-    bloques_es = {}
-    current_block = None
-    lines = raw_lyrics_es.split("\n")
-    for line in lines + [""]:
-        if line.strip() == "":
-            current_block = None
-            continue
-        if current_block is None:
-            current_block = line.strip()
-            bloques_es[current_block] = []
-        else:
-            bloques_es[current_block].append(line.strip())
     bloques_por_cancion_es.append(bloques_es)
 
-    secuencia_str = st.text_input(
-        "슬라이드 순서 (예: A,A,B,C), 띄어쓰기 없이, 대문자 소문자 예민, 쉼표로 분리",
-        key=f"secuencia_{i}",
-    )
+    secuencia_str = st.text_input("슬라이드 순서 (쉼표)", key=f"seq_{i}")
+    resaltado_str = st.text_input("후렴 블록", key=f"res_{i}")
 
-    bloque_resaltado_str = st.text_input(
-        "후렴 블록들 입력 (쉼표로 분리)",
-        key=f"resaltado_{i}",
-    )
-
-    bloques_resaltados = [b.strip() for b in bloque_resaltado_str.split(",") if b.strip()]
-    resaltados.append(bloques_resaltados)
-
-    # ✅ 순서 검증은 KR 블록 기준 (ES 없으면 빈칸 출력)
-    secuencia_valida = [s.strip() for s in secuencia_str.split(",") if s.strip() in bloques_kr]
-    secuencias.append(secuencia_valida)
+    secuencias.append([s for s in secuencia_str.split(",") if s in bloques_kr])
+    resaltados.append([s for s in resaltado_str.split(",") if s])
 
 if st.button("완료!"):
     ppt = crear_ppt(
@@ -225,4 +201,3 @@ if st.button("완료!"):
 
     if os.path.exists(ppt_path):
         os.remove(ppt_path)
-
