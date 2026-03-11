@@ -125,7 +125,7 @@ with pos2:
 color_titulo_kr = "#000000"
 bg_titulo = "#FFFFFF"
 color_letra_kr = "#FFFFFF"
-color_letra_es = "#FFFF00"
+color_letra_es = "#FFFFFF"
 bg_letra = "#000000"
 
 estilos = {
@@ -201,5 +201,6 @@ if st.button("완료!"):
 
     if os.path.exists(ppt_path):
         os.remove(ppt_path)
+
 
 
