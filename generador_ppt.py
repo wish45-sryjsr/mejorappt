@@ -117,9 +117,9 @@ with col4:
 # ✅ 가사 위치만 조절 (제목 위치 슬라이더 제거됨)
 pos1, pos2 = st.columns(2)
 with pos1:
-    altura_kr = st.slider("한국어 가사 위치 (PPT에서 위)", 0.0, 6.0, value=1.2, step=0.1)
+    altura_kr = st.slider("한국어 가사 위치 (PPT에서 위)", 0.0, 6.0, value=0.0, step=0.1)
 with pos2:
-    altura_es = st.slider("스페인어 가사 위치 (PPT에서 아래)", 0.0, 6.0, value=3.0, step=0.1)
+    altura_es = st.slider("스페인어 가사 위치 (PPT에서 아래)", 0.0, 6.0, value=0.5, step=0.1)
 
 # 색상 (고정)
 color_titulo_kr = "#000000"
@@ -201,6 +201,7 @@ if st.button("완료!"):
 
     if os.path.exists(ppt_path):
         os.remove(ppt_path)
+
 
 
 
